@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using accountapi.Models;
+using accountapi.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace accountapi.Controllers
@@ -10,6 +12,23 @@ namespace accountapi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly StudentContext _context;
+
+        public ValuesController( StudentContext context )
+        {
+            _context = context;
+
+            if ( _context.Students.Count() == 0 )
+            {
+                // 테스트용
+                // Create a new Student if collection is empty,
+                // which means you can't delete all Student.
+                _context.Students.Add(new Student { ID=0, FirstName = "ORM",LastName="Entity" });
+                _context.SaveChanges();
+            }
+        }
+
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
