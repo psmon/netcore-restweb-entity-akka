@@ -12,9 +12,9 @@ namespace accountapi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private readonly StudentContext _context;
+        private readonly AccountContent _context;
 
-        public ValuesController( StudentContext context )
+        public ValuesController( AccountContent context )
         {
             _context = context;
 

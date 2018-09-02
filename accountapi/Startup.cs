@@ -26,7 +26,7 @@ namespace accountapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices( IServiceCollection services )
         {
-            services.AddDbContext<StudentContext>(opt =>
+            services.AddDbContext<AccountContent>(opt =>
                 opt.UseMySql("server=localhost;database=db_account;user=psmon;password=db1234"));
 
             
