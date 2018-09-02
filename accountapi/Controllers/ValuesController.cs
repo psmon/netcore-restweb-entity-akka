@@ -25,6 +25,7 @@ namespace accountapi.Controllers
                 // which means you can't delete all Student.
                 _context.Students.Add(new Student { ID=0, FirstName = "ORM",LastName="Entity" });
                 _context.SaveChanges();
+                
             }
         }
 

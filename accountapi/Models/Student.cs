@@ -1,11 +1,10 @@
 ﻿using System;
-
 using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace accountapi.Models
 {
-    [Table("student", Schema = "db_account")]
+    [Table("student")]
     public class Student
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
