@@ -20,11 +20,10 @@ namespace accountapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices( IServiceCollection services )
         {
-            services.AddDbContext<AccountContent>(opt =>
-                opt.UseMySql("server=localhost;database=db_account;user=psmon;password=db1234"));
-
+            services.AddDbContext<AccountContent>(opt => {
+                opt.UseMySql("server=localhost;database=db_account;user=psmon;password=db1234");
+            });
             
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -33,9 +32,14 @@ namespace accountapi
         {
             if ( env.IsDevelopment() )
             {
-                app.UseDeveloperExceptionPage();
+                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetRequiredService<AccountContent>();
+                    context.Database.EnsureDeleted();
+                    context.Database.EnsureCreated();
+                }
+                app.UseDeveloperExceptionPage();               
             }
-
             app.UseMvc();
         }
     }
