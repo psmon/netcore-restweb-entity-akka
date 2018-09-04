@@ -6,12 +6,18 @@ namespace accountapi.Repository
     
     public class AccountContent : DbContext
     {
-        public DbSet<Student> Students { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<SocialInfo> SocialInfos { get; set; }
 
         public AccountContent( DbContextOptions<AccountContent> options )
         : base(options)
         {
             
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //modelBuilder.Entity<AuditEntry>();
         }
 
 

@@ -18,14 +18,32 @@ namespace accountapi.Controllers
         {
             _context = context;
 
-            if ( _context.Students.Count() == 0 )
+            if ( _context.Users.Count() == 0 )
             {
+                SocialInfo socialInfo = new SocialInfo
+                {
+                    SocialUserNo="1234",
+                    SocialProviderName="FaceBook",
+                    NickName="박상만",                   
+                };
+
+                User user = new User
+                {
+                    IsActive=true                   
+                };
+                user.SocialInfos = new List<SocialInfo>();
+                user.SocialInfos.Add(socialInfo);
+
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+
                 // 테스트용
                 // Create a new Student if collection is empty,
                 // which means you can't delete all Student.
-                _context.Students.Add(new Student { ID=0, FirstName = "ORM",LastName="Entity" });
-                _context.SaveChanges();
-                
+                //_context.Users.Add(new Student { ID=0, FirstName = "ORM",LastName="Entity" });
+                //_context.SaveChanges();
+
             }
         }
 
