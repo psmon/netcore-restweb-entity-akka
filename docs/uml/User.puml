@@ -1,0 +1,7 @@
+@startuml
+class User {
+    + UserId : int <<get>> <<set>>
+    + SocialInfos : List<SocialInfo> <<get>> <<set>>
+    + IsActive : Boolean <<get>> <<set>>
+}
+@enduml

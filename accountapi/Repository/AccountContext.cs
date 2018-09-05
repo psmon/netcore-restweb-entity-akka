@@ -19,7 +19,6 @@ namespace accountapi.Repository
         {
             //modelBuilder.Entity<AuditEntry>();
         }
-
-
+        
     }
 }

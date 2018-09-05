@@ -16,7 +16,6 @@ namespace accountapi.Models
         [ForeignKey("UserForeignKey")]
         public User User { get; set; }
 
-
         public String SocialProviderName { get; set; }
 
         public String SocialUserNo { get; set; }
