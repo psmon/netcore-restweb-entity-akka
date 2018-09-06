@@ -18,10 +18,10 @@ namespace accountapi.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*
+            //제약설정
             modelBuilder.Entity<TokenHistory>()
                 .HasIndex(p => new { p.AuthToken })
-                .IsUnique(true);*/
+                .IsUnique(true);
         }
         
     }
