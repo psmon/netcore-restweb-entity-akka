@@ -8,6 +8,7 @@ namespace accountapi.Repository
     {
         public DbSet<User> Users { get; set; }
         public DbSet<SocialInfo> SocialInfos { get; set; }
+        public DbSet<TokenHistory> TokenHistories { get; set; }
 
         public AccountContent( DbContextOptions<AccountContent> options )
         : base(options)
@@ -17,7 +18,10 @@ namespace accountapi.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<AuditEntry>();
+            /*
+            modelBuilder.Entity<TokenHistory>()
+                .HasIndex(p => new { p.AuthToken })
+                .IsUnique(true);*/
         }
         
     }

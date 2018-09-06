@@ -15,16 +15,18 @@ namespace accountapi.Controllers
     public class AccountControler : ControllerBase
     {
         private readonly AccountContent _context;
+        private readonly AccountService _service;
 
         public AccountControler(AccountContent context)
         {
             _context = context;
+            _service = new AccountService(_context);
         }
 
         [HttpGet]
         public User GetUserByid(int id)
-        {
-            return _context.Users.First(p => p.UserId == id);
+        {            
+            return _service.GetUserByid(id);
         }
         
     }

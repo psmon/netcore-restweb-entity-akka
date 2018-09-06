@@ -2,6 +2,10 @@
 class User {
     + UserId : int <<get>> <<set>>
     + SocialInfos : List<SocialInfo> <<get>> <<set>>
-    + IsActive : Boolean <<get>> <<set>>
+    + IsSocialActive : Boolean <<get>> <<set>>
+    + NickName : String <<get>> <<set>>
+    + MyId : String <<get>> <<set>>
+    + PassWord : String <<get>> <<set>>
+    + RegDate : DateTime <<get>> <<set>>
 }
 @enduml
