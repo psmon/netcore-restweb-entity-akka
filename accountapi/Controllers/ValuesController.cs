@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using accountapi.Models;
 using accountapi.Repository;
+using accountapi.Contents;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

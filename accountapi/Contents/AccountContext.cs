@@ -1,7 +1,7 @@
 ﻿using accountapi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace accountapi.Repository
+namespace accountapi.Contents
 {
     
     public class AccountContent : DbContext

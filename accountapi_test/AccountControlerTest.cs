@@ -1,11 +1,14 @@
 ﻿using accountapi.Controllers;
 using accountapi.Models;
 using accountapi.Repository;
+using accountapi.Contents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using Xunit;
+using Akka.Actor;
+using accountapi.Actors;
 
 namespace accountapi_test
 {
@@ -20,6 +23,8 @@ namespace accountapi_test
         }
 
         private AccountContent _context;
+        private ActorSystem _actorSystem;
+        private AccountService _accountService;
 
         internal static int PrepareTestData()
         {
@@ -42,8 +47,37 @@ namespace accountapi_test
             var builder = new DbContextOptionsBuilder<AccountContent>()
                 .UseMySql(AccountControlerTest.ConnectionString);
 
-            var context = new AccountContent(builder.Options);            
-            _context = context;            
+            _context = new AccountContent(builder.Options);
+            _actorSystem = ActorSystem.Create("accountapi");
+            _accountService = new AccountService(_context, _actorSystem);
+
+
+
+        }
+
+        [Fact]
+        public void Actor_CRUDTest()
+        {
+            _accountService.Create_CRUDActor("CrudActor");
+           
+            IActorRef crudActor = _accountService.GetLocalActor("CrudActor");
+
+            crudActor.Tell(_accountService as IAccountService); //사용할 서비스 지정
+
+            String testNick = "iam actor";
+
+            CRUDAction res = crudActor.Ask(new CRUDAction()
+            {
+                action = "insert",
+                data = new User() { MyId = "actor1", PassWord = "1234", NickName = testNick },
+                isupdate = true
+
+            }).Result as CRUDAction;
+
+            User someUser = _context.Users.FirstOrDefault(u => u.NickName == testNick );
+
+            Assert.Equal(testNick, someUser.NickName);
+            
         }
 
         [Fact]
@@ -56,7 +90,7 @@ namespace accountapi_test
         [Fact]
         public void TokenTest1()
         {
-            var service = new AccountService(_context);           
+            var service = new AccountService(_context, _actorSystem);           
             var accessToken = service.GetAccessToken("TestID1", "TEST1231");
             User myInfo = service.GetMyInfo(accessToken);
             Assert.Equal("Mynick1", myInfo.NickName);           
@@ -67,7 +101,7 @@ namespace accountapi_test
         public void TestUserActive()
         {
             bool expected = false;
-            var controller = new AccountControler(_context);
+            var controller = new AccountControler(_context,_actorSystem,_accountService);
             User result = controller.GetUserByid(1);
             Assert.Equal(expected, result.IsSocialActive);
         }

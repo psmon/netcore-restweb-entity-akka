@@ -1,4 +1,6 @@
-﻿using accountapi.Controllers;
+﻿using accountapi.Actors;
+using accountapi.Contents;
+using accountapi.Controllers;
 using accountapi.Repository;
 using Akka.Actor;
 using Microsoft.AspNetCore.Builder;
@@ -28,7 +30,7 @@ namespace accountapi
 
             services.AddSingleton<ActorSystem>(_ => ActorSystem.Create("accountapi"));
 
-            services.AddScoped<AccountService>();
+            services.AddSingleton<AccountService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
@@ -46,9 +48,8 @@ namespace accountapi
                     //context.Database.EnsureCreated();
                     var actorSystem = serviceScope.ServiceProvider.GetRequiredService<ActorSystem>();
                     System.Console.WriteLine( "Actor System Check==="+actorSystem.Name);
-                    //actorSystem.Name
 
-
+ 
                 }
                 app.UseDeveloperExceptionPage();               
             }
