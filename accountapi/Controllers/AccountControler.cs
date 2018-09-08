@@ -7,27 +7,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using accountapi.Models;
 using accountapi.Repository;
+using Akka.Actor;
 
 namespace accountapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AccountControler : ControllerBase
     {
         private readonly AccountContent _context;
         private readonly AccountService _service;
+ 
 
-        public AccountControler(AccountContent context)
+        public AccountControler(AccountContent context, 
+            ActorSystem actorSystem,
+            AccountService accountService)
         {
             _context = context;
-            _service = new AccountService(_context);
+            _service = accountService;
         }
 
-        [HttpGet]
+        [HttpGet("user/{id}")]
         public User GetUserByid(int id)
         {            
             return _service.GetUserByid(id);
         }
-        
+
+        [HttpGet("sysinfo/akka")]
+        public String GetActorSystemInfo()
+        {
+            return _service.GetActorSystemInfo();
+        }
+
     }
 }

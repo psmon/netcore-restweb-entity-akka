@@ -4,17 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using accountapi.Models;
-
+using Akka.Actor;
 
 namespace accountapi.Controllers
 {
     public class AccountService
     {
         private readonly AccountContent _context;
+        private readonly ActorSystem _actorSystem;
 
-        public AccountService(AccountContent context)
+        public AccountService(AccountContent context, ActorSystem actorSystem)
         {
             _context = context;
+            _actorSystem = actorSystem;
+
+            Console.WriteLine(_context.Users.First(p => p.UserId == 1).NickName);
+            System.Console.WriteLine("Actor System Check===" + actorSystem.Name);
+        }
+
+        public String GetActorSystemInfo()
+        {
+            return String.Format("=== ActorSystem Info {0} {1}", _actorSystem.Name,_actorSystem.StartTime);
         }
 
         public User GetUserByid(int id)
