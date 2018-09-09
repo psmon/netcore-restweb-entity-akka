@@ -8,18 +8,11 @@ using accountapi.Contents;
 using Akka.Actor;
 using accountapi.Actors;
 
+
 namespace accountapi.Controllers
 {
-    public interface IAccountService
-    {
-        void AddUser(User user);
-        void DelUser(User user);
-        User GetUser(string userID);
-        void UpdateDB();
 
-    }
-
-    public class AccountService : IAccountService
+    public class AccountService : ICurdRepo
     {
         private readonly AccountContent _context;
         private readonly ActorSystem _actorSystem;

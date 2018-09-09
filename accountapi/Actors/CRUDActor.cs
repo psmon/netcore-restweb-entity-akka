@@ -1,5 +1,6 @@
 ﻿using accountapi.Controllers;
 using accountapi.Models;
+using accountapi.Repository;
 using Akka.Actor;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,12 @@ namespace accountapi.Actors
 
     public class CRUDActor : ReceiveActor
     {
-        internal IAccountService _accountService;
+        internal ICurdRepo _repository;
 
         public CRUDActor()
         {
-            Receive<IAccountService>(m => {
-                _accountService = m;
+            Receive<ICurdRepo>(m => {
+                _repository = m;
                 Sender.Tell(new CRUDAction() { msg = "ok"});
             });
 
@@ -32,16 +33,16 @@ namespace accountapi.Actors
                 switch (m.action)
                 {
                     case "insert":
-                        _accountService.AddUser(m.data as User);
+                        _repository.AddUser(m.data as User);
                         break;
                     case "delete":
-                        _accountService.DelUser(m.data as User);
+                        _repository.DelUser(m.data as User);
                         break;
                     default:
                         throw new Exception("unsport msg");
                        
                 }
-                if(m.isupdate) _accountService.UpdateDB();
+                if(m.isupdate) _repository.UpdateDB();
 
                 Sender.Tell(new CRUDAction() { action = m.action ,seq=m.seq,msg="ok"  });
             });

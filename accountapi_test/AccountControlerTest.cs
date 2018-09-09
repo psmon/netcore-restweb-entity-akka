@@ -62,7 +62,7 @@ namespace accountapi_test
            
             IActorRef crudActor = _accountService.GetLocalActor("CrudActor");
 
-            crudActor.Tell(_accountService as IAccountService); //사용할 서비스 지정
+            crudActor.Tell(_accountService as ICurdRepo);  //사용할 서비스 지정
 
             String testNick = "iam actor";
 
