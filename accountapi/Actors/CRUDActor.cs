@@ -20,11 +20,11 @@ namespace accountapi.Actors
 
     public class CRUDActor : ReceiveActor
     {
-        internal ICurdRepo _repository;
+        internal ICurdRepo<User> _repository;
 
         public CRUDActor()
         {
-            Receive<ICurdRepo>(m => {
+            Receive<ICurdRepo<User>>(m => {
                 _repository = m;
                 Sender.Tell(new CRUDAction() { msg = "ok"});
             });

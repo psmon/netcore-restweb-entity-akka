@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace accountapi.Repository
 {
-    public interface ICurdRepo
+    public interface ICurdRepo<T>
     {
-        void AddUser(User user);
-        void DelUser(User user);
-        User GetUser(string userID);
+        void AddUser(T user);
+        void DelUser(T user);
+        T GetUser(string userID);
         void UpdateDB();
     }
 }

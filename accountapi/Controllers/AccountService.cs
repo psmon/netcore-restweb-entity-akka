@@ -12,7 +12,7 @@ using accountapi.Actors;
 namespace accountapi.Controllers
 {
 
-    public class AccountService : ICurdRepo
+    public class AccountService : ICurdRepo<User>
     {
         private readonly AccountContent _context;
         private readonly ActorSystem _actorSystem;
