@@ -6,27 +6,50 @@ using accountapi.Models;
 
 namespace accountapi.Repository
 {
-
-    public class LocalRepository : ICurdRepo<User>
+    public interface ILocalEntity
     {
-        public void AddUser(User user)
+        String ID { get; set; }
+    }
+
+    public class LocalEntity<T> : ILocalEntity
+    {
+        public String ID { get; set; }
+        public T Data { get; set; }
+    }
+
+    public class LocalRepository<T> : ICurdRepo<T>
+    {
+        List<T> localStorage = new List<T>();
+
+        public void AddObj(T obj)
         {
-            throw new NotImplementedException();
+            localStorage.Add(obj);
         }
 
-        public void DelUser(User user)
-        {
-            throw new NotImplementedException();
+        public void DelObj(T obj)
+        {            
+            localStorage.Remove(obj);
         }
 
-        public User GetUser(string userID)
+        public T GetObj(T obj)
         {
-            throw new NotImplementedException();
+            return localStorage.Find( t=>t.Equals(obj));
+        }
+
+        public T GetObj(string id)
+        {
+            T result = default(T);
+            localStorage.ForEach(t =>
+            {
+                ILocalEntity data = t as ILocalEntity;
+                if (data.ID == id) result = t;
+            });
+            return result;           
         }
 
         public void UpdateDB()
         {
-            throw new NotImplementedException();
+            // -lazy update 미지원           
         }
     }
 }

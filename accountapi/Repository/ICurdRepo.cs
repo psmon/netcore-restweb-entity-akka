@@ -8,9 +8,9 @@ namespace accountapi.Repository
 {
     public interface ICurdRepo<T>
     {
-        void AddUser(T user);
-        void DelUser(T user);
-        T GetUser(string userID);
+        void AddObj(T obj);
+        void DelObj(T obj);
+        T GetObj(string id);
         void UpdateDB();
     }
 }

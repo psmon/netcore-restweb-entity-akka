@@ -22,7 +22,7 @@ namespace accountapi.Controllers
         {
             _actorSystem.ActorOf<CRUDActor>(actorName);
         }
-
+        
         public IActorRef GetLocalActor(string actorName)
         {
             return _actorSystem.ActorSelection("/user/" + actorName).ResolveOne(TimeSpan.FromSeconds(WAITFOR_ACTOR_SEC)).Result;
@@ -78,7 +78,7 @@ namespace accountapi.Controllers
             return myinfo;
         }
 
-        public void AddUser(User user)
+        public void AddObj(User user)
         {
             _context.Add(user);           
         }
@@ -88,12 +88,12 @@ namespace accountapi.Controllers
             _context.SaveChanges();
         }
 
-        public void DelUser(User user)
+        public void DelObj(User user)
         {
             _context.Remove(user);
         }
 
-        public User GetUser(string userID)
+        public User GetObj(string userID)
         {
             return _context.Users.Single( u=>u.MyId== userID);
         }

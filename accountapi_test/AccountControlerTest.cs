@@ -105,5 +105,24 @@ namespace accountapi_test
             User result = controller.GetUserByid(1);
             Assert.Equal(expected, result.IsSocialActive);
         }
+
+        [Fact]
+        public void LocalStoage()
+        {
+            LocalRepository<LocalEntity<User>> localRepository = new LocalRepository<LocalEntity<User>>();
+
+            for(int i = 0; i < 10; i++)
+            {
+                LocalEntity<User> addUser = new LocalEntity<User>()
+                    { ID=i.ToString(),Data=new User() { NickName="name-"+i.ToString()  } };
+
+                localRepository.AddObj(addUser);
+            }
+
+            String nickName =localRepository.GetObj("5").Data.NickName;
+            Assert.Equal("name-5", nickName);
+            
+        }
+
     }
 }

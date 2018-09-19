@@ -24,6 +24,7 @@ namespace accountapi.Actors
 
         public CRUDActor()
         {
+            // CRUD를 실시간 교체하여 RDB<->LOCALDB 전환이 가능
             Receive<ICurdRepo<User>>(m => {
                 _repository = m;
                 Sender.Tell(new CRUDAction() { msg = "ok"});
@@ -33,10 +34,10 @@ namespace accountapi.Actors
                 switch (m.action)
                 {
                     case "insert":
-                        _repository.AddUser(m.data as User);
+                        _repository.AddObj(m.data as User);
                         break;
                     case "delete":
-                        _repository.DelUser(m.data as User);
+                        _repository.DelObj(m.data as User);
                         break;
                     default:
                         throw new Exception("unsport msg");
