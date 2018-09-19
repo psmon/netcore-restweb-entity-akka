@@ -2,4 +2,5 @@
 !include .\\SocialInfo.puml
 !include .\\TokenHistory.puml
 !include .\\User.puml
+!include .\\Test\TestDB.puml
 @enduml

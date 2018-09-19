@@ -9,6 +9,8 @@ using System.Linq;
 using Xunit;
 using Akka.Actor;
 using accountapi.Actors;
+using accountapi.Models.Test;
+using System.Threading.Tasks;
 
 namespace accountapi_test
 {
@@ -16,6 +18,9 @@ namespace accountapi_test
     public class AccountControlerTest
     {
         public static readonly string ConnectionString = "server=localhost;database=db_account;user=psmon;password=db1234";
+
+        public static readonly string testConnectionString = "server=localhost;database=db_test;user=psmon;password=db1234";
+
 
         public AccountControlerTest()
         {
@@ -25,6 +30,8 @@ namespace accountapi_test
         private AccountContent _context;
         private ActorSystem _actorSystem;
         private AccountService _accountService;
+        private TestContext _testContext;
+        private TestContext _testContext2;
 
         internal static int PrepareTestData()
         {
@@ -38,7 +45,17 @@ namespace accountapi_test
                 .Select(i => new User { MyId = "TestID" + i, PassWord = "TEST123" + i, NickName = "Mynick" + i, RegDate = DateTime.Now, IsSocialActive = false });
 
             context.Users.AddRange(users);
-            context.SaveChanges();           
+            context.SaveChanges();
+
+            var testOpt = new DbContextOptionsBuilder<TestContext>()
+                .UseMySql(AccountControlerTest.testConnectionString);
+
+            var testContext = new TestContext(testOpt.Options);
+
+            testContext.Database.EnsureDeleted();           
+            testContext.Database.EnsureCreated();
+            
+
             return context.Users.Count(t => t.IsSocialActive == false);
         }
 
@@ -51,8 +68,45 @@ namespace accountapi_test
             _actorSystem = ActorSystem.Create("accountapi");
             _accountService = new AccountService(_context, _actorSystem);
 
+            //For Test
+            var testOpt = new DbContextOptionsBuilder<TestContext>()
+                .UseMySql(AccountControlerTest.testConnectionString);
 
+            _testContext = new TestContext(testOpt.Options);
+            _testContext2 = new TestContext(testOpt.Options);
 
+        }
+
+        protected void ResetTestDB()
+        {
+            _testContext.Database.EnsureDeleted();
+            _testContext.Database.EnsureCreated();
+        }
+
+        [Fact]
+        public void ConcurrencyTest()
+        {
+            ResetTestDB();
+
+            Person person1 = new Person();
+            person1.LastName = "PS";
+            person1.FirstName = "MON";
+            _testContext.Persons.Add(person1);
+            _testContext.SaveChanges();
+
+            Person edit1 = _testContext2.Persons.FirstOrDefault(e => e.FirstName == "MON");
+            Assert.Equal("PS", edit1.LastName);
+
+            for(int i = 0; i < 10; i++)
+            {
+                String editName = "PS" + i;
+                String editName2 = "XS" + i;
+                person1.LastName = editName;
+                edit1.LastName = editName2;
+                _testContext.SaveChangesAsync();
+                _testContext2.SaveChanges();
+            }
+            
         }
 
         [Fact]
@@ -84,7 +138,8 @@ namespace accountapi_test
         public void TestUserCntChk()
         {
             var count = _context.Users.Count(t => t.IsSocialActive==false);
-            Assert.Equal(10, count);
+            
+            Assert.InRange(count, 9, 20);
         }
 
         [Fact]

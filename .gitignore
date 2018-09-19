@@ -3,3 +3,8 @@
 ################################################################################
 
 /.vs/accountapi/v15/Server/sqlite3
+/accountapi/bin/Debug/netcoreapp2.1
+/accountapi/obj
+/accountapi_test/bin/Debug/netcoreapp2.1
+/accountapi_test/obj
+/.vs/accountapi

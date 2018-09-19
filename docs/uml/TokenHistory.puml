@@ -1,0 +1,9 @@
+@startuml
+class TokenHistory {
+    + TokenHistoryId : int <<get>> <<set>>
+    + User : User <<get>> <<set>>
+    + AuthToken : String <<get>> <<set>>
+    + CreateTime : DateTime <<get>> <<set>>
+    + AccessTime : DateTime <<get>> <<set>>
+}
+@enduml

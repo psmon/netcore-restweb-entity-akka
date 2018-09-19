@@ -1,0 +1,12 @@
+@startuml
+class Blog {
+    + BlogId : int <<get>> <<set>>
+    + Url : string <<get>> <<set>>
+    + Timestamp : byte[] <<get>> <<set>>
+}
+class Person {
+    + PersonId : int <<get>> <<set>>
+    + LastName : string <<get>> <<set>>
+    + FirstName : string <<get>> <<set>>
+}
+@enduml

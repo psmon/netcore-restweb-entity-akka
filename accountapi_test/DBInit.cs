@@ -6,7 +6,7 @@ namespace accountapi_test
     public class DBInit
     {
         [Fact]
-        public void Test1()
+        public void PrepareTestData()
         {
             int count = AccountControlerTest.PrepareTestData();
             Assert.Equal(10, count);
