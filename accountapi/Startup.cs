@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using accountapi.Config;
 
 namespace accountapi
 {
@@ -25,6 +26,7 @@ namespace accountapi
         public void ConfigureServices( IServiceCollection services )
         {
             services.AddDbContext<AccountContent>(opt => {
+                opt.UseLoggerFactory(LogSettings.ConsoleLogger);
                 opt.UseMySql("server=localhost;database=db_account;user=psmon;password=db1234");
             });
 

@@ -11,6 +11,7 @@ using Akka.Actor;
 using accountapi.Actors;
 using accountapi.Models.Test;
 using System.Threading.Tasks;
+using accountapi.Config;
 
 namespace accountapi_test
 {
@@ -36,8 +37,10 @@ namespace accountapi_test
         internal static int PrepareTestData()
         {
             var builder = new DbContextOptionsBuilder<AccountContent>()
+                .UseLoggerFactory(LogSettings.ConsoleLogger)
                 .UseMySql(AccountControlerTest.ConnectionString);
             var context = new AccountContent(builder.Options);
+            
 
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
@@ -48,6 +51,7 @@ namespace accountapi_test
             context.SaveChanges();
 
             var testOpt = new DbContextOptionsBuilder<TestContext>()
+                .UseLoggerFactory(LogSettings.ConsoleLogger)
                 .UseMySql(AccountControlerTest.testConnectionString);
 
             var testContext = new TestContext(testOpt.Options);
@@ -62,6 +66,7 @@ namespace accountapi_test
         protected void InitContext()
         {
             var builder = new DbContextOptionsBuilder<AccountContent>()
+                .UseLoggerFactory(LogSettings.ConsoleLogger)
                 .UseMySql(AccountControlerTest.ConnectionString);
 
             _context = new AccountContent(builder.Options);
@@ -70,6 +75,7 @@ namespace accountapi_test
 
             //For Test
             var testOpt = new DbContextOptionsBuilder<TestContext>()
+                .UseLoggerFactory(LogSettings.ConsoleLogger)
                 .UseMySql(AccountControlerTest.testConnectionString);
 
             _testContext = new TestContext(testOpt.Options);
@@ -88,23 +94,31 @@ namespace accountapi_test
         {
             ResetTestDB();
 
-            Person person1 = new Person();
-            person1.LastName = "PS";
-            person1.FirstName = "MON";
-            _testContext.Persons.Add(person1);
-            _testContext.SaveChanges();
-
-            Person edit1 = _testContext2.Persons.FirstOrDefault(e => e.FirstName == "MON");
-            Assert.Equal("PS", edit1.LastName);
-
-            for(int i = 0; i < 10; i++)
+            try
             {
-                String editName = "PS" + i;
-                String editName2 = "XS" + i;
-                person1.LastName = editName;
-                edit1.LastName = editName2;
-                _testContext.SaveChangesAsync();
-                _testContext2.SaveChanges();
+                Person person1 = new Person();
+                person1.LastName = "PS";
+                person1.FirstName = "MON";
+                _testContext.Persons.Add(person1);
+                _testContext.SaveChanges();
+
+                Person edit1 = _testContext2.Persons.FirstOrDefault(e => e.FirstName == "MON");
+                Assert.Equal("PS", edit1.LastName);
+
+                for (int i = 0; i < 10; i++)
+                {
+                    String editName = "PS" + i;
+                    String editName2 = "XS" + i;
+                    person1.LastName = editName;
+                    edit1.LastName = editName2;
+                    _testContext.SaveChangesAsync();
+                    _testContext2.SaveChanges();
+                }
+
+            }
+            catch(DbUpdateConcurrencyException e)
+            {
+
             }
             
         }
