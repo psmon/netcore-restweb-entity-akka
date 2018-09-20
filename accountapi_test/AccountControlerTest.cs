@@ -12,6 +12,11 @@ using accountapi.Actors;
 using accountapi.Models.Test;
 using System.Threading.Tasks;
 using accountapi.Config;
+using System.IO;
+using System.Diagnostics;
+using Xunit.Sdk;
+using System.Collections.Generic;
+using Xunit.Abstractions;
 
 namespace accountapi_test
 {
@@ -21,8 +26,7 @@ namespace accountapi_test
         public static readonly string ConnectionString = "server=localhost;database=db_account;user=psmon;password=db1234";
 
         public static readonly string testConnectionString = "server=localhost;database=db_test;user=psmon;password=db1234";
-
-
+        
         public AccountControlerTest()
         {
             InitContext();
@@ -37,7 +41,7 @@ namespace accountapi_test
         internal static int PrepareTestData()
         {
             var builder = new DbContextOptionsBuilder<AccountContent>()
-                .UseLoggerFactory(LogSettings.ConsoleLogger)
+                .UseLoggerFactory(LogSettings.DebugLogger)
                 .UseMySql(AccountControlerTest.ConnectionString);
             var context = new AccountContent(builder.Options);
             
@@ -51,7 +55,7 @@ namespace accountapi_test
             context.SaveChanges();
 
             var testOpt = new DbContextOptionsBuilder<TestContext>()
-                .UseLoggerFactory(LogSettings.ConsoleLogger)
+                .UseLoggerFactory(LogSettings.DebugLogger)
                 .UseMySql(AccountControlerTest.testConnectionString);
 
             var testContext = new TestContext(testOpt.Options);
@@ -66,7 +70,7 @@ namespace accountapi_test
         protected void InitContext()
         {
             var builder = new DbContextOptionsBuilder<AccountContent>()
-                .UseLoggerFactory(LogSettings.ConsoleLogger)
+                .UseLoggerFactory(LogSettings.DebugLogger)
                 .UseMySql(AccountControlerTest.ConnectionString);
 
             _context = new AccountContent(builder.Options);
@@ -75,7 +79,7 @@ namespace accountapi_test
 
             //For Test
             var testOpt = new DbContextOptionsBuilder<TestContext>()
-                .UseLoggerFactory(LogSettings.ConsoleLogger)
+                .UseLoggerFactory(LogSettings.DebugLogger)
                 .UseMySql(AccountControlerTest.testConnectionString);
 
             _testContext = new TestContext(testOpt.Options);
@@ -192,6 +196,7 @@ namespace accountapi_test
             Assert.Equal("name-5", nickName);
             
         }
+
 
     }
 }
