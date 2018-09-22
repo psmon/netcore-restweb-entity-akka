@@ -17,22 +17,15 @@ namespace accountapi.Controllers
     [ApiController]
     public class AccountControler : ControllerBase
     {
-        private readonly AccountContent _context;
-        private readonly AccountService _service;
-        private readonly ActorSystem _actorSystem;
        
-
-        public AccountControler(AccountContent context, 
-            ActorSystem actorSystem,
-            AccountService accountService)
-        {
-            _context = context;
-            _service = accountService;
-            _actorSystem = actorSystem;           
+        private readonly AccountService _service;
+       
+        public AccountControler(AccountService accountService)
+        {            
+            _service = accountService;                      
         }
 
-
-
+        
         [HttpGet("user/{id}")]
         public User GetUserByid(int id)
         {            

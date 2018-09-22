@@ -32,7 +32,9 @@ namespace accountapi
 
             services.AddSingleton<ActorSystem>(_ => ActorSystem.Create("accountapi"));
 
-            services.AddSingleton<AccountService>();
+            //services.AddSingleton<AccountService>();
+
+            services.AddTransient<AccountService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
