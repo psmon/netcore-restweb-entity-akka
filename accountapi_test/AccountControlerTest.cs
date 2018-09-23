@@ -17,19 +17,28 @@ using System.Diagnostics;
 using Xunit.Sdk;
 using System.Collections.Generic;
 using Xunit.Abstractions;
+using Newtonsoft.Json;
 
 namespace accountapi_test
 {
 
     public class AccountControlerTest
     {
+        private readonly ITestOutputHelper output;
+
         public static readonly string ConnectionString = "server=localhost;database=db_account;user=psmon;password=db1234";
 
         public static readonly string testConnectionString = "server=localhost;database=db_test;user=psmon;password=db1234";
         
-        public AccountControlerTest()
+        public AccountControlerTest(ITestOutputHelper output)
         {
+            this.output = output;
             InitContext();
+        }
+
+        protected void OutPutJson(Object obj)
+        {
+            output.WriteLine("{0}", JsonConvert.SerializeObject(obj, Formatting.Indented));          
         }
 
         private AccountContent _context;
@@ -176,6 +185,7 @@ namespace accountapi_test
             bool expected = false;
             var controller = new AccountControler(_accountService);
             User result = controller.GetUserByid(1);
+            OutPutJson(result);            
             Assert.Equal(expected, result.IsSocialActive);
         }
 
