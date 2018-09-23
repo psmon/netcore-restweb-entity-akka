@@ -174,7 +174,7 @@ namespace accountapi_test
         public void TestUserActive()
         {
             bool expected = false;
-            var controller = new AccountControler(_context,_actorSystem,_accountService);
+            var controller = new AccountControler(_accountService);
             User result = controller.GetUserByid(1);
             Assert.Equal(expected, result.IsSocialActive);
         }
