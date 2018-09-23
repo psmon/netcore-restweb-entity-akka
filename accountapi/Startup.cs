@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using accountapi.Config;
+using System;
 
 namespace accountapi
 {
@@ -33,8 +34,16 @@ namespace accountapi
             services.AddSingleton<ActorSystem>(_ => ActorSystem.Create("accountapi"));
 
             //services.AddSingleton<AccountService>();
-
             services.AddTransient<AccountService>();
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
@@ -57,6 +66,7 @@ namespace accountapi
                 }
                 app.UseDeveloperExceptionPage();               
             }
+            app.UseSession();
             app.UseMvc();
         }
     }

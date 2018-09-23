@@ -34,8 +34,16 @@ namespace accountapi.Controllers
 
         [HttpGet("sysinfo/akka")]
         public String GetActorSystemInfo()
-        {
-            return _service.GetActorSystemInfo();
+        {            
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("akkainfo")))
+            {
+                String systemInfo = _service.GetActorSystemInfo();
+                HttpContext.Session.SetString( "akkainfo", String.Format("{0} == {1}", systemInfo,DateTime.Now) );
+            }
+
+            var systemInfo_cache = HttpContext.Session.GetString("akkainfo");
+
+            return systemInfo_cache;
         }
 
     }
