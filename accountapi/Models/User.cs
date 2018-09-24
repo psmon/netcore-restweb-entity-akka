@@ -13,6 +13,8 @@ namespace accountapi.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
 
+        public Profile Profile { get; set; }
+
         public List<SocialInfo> SocialInfos { get; set; }
 
         public Boolean IsSocialActive { get; set; }
