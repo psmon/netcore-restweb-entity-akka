@@ -10,6 +10,7 @@ using accountapi.Repository;
 using Akka.Actor;
 using accountapi.Contents;
 using accountapi.Actors;
+using accountapi.Models.API;
 
 namespace accountapi.Controllers
 {
@@ -44,6 +45,20 @@ namespace accountapi.Controllers
             var systemInfo_cache = HttpContext.Session.GetString("akkainfo");
 
             return systemInfo_cache;
+        }
+
+        // POST: api/AccountControler
+        [HttpPost("login")]
+        public async Task<IActionResult> PostUser([FromBody] LoginReq user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            String accessToken = _service.GetAccessToken(user.Id, user.Pw);
+            
+            return CreatedAtAction("login", new { id = user.Id , token= accessToken  }, user);
         }
 
     }
