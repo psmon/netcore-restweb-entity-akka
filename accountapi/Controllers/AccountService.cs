@@ -7,7 +7,7 @@ using accountapi.Models;
 using accountapi.Contents;
 using Akka.Actor;
 using accountapi.Actors;
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace accountapi.Controllers
 {
@@ -56,7 +56,9 @@ namespace accountapi.Controllers
             }
             else
             {
-                string token = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+                string base64 = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+                string token = Base64UrlEncoder.Encode(base64);
+                
                 _context.TokenHistories.Add(new TokenHistory()
                 {
                     User = accessUser,

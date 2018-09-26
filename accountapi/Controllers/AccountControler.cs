@@ -49,16 +49,25 @@ namespace accountapi.Controllers
 
         // POST: api/AccountControler
         [HttpPost("login")]
-        public async Task<IActionResult> PostUser([FromBody] LoginReq user)
+        public ApiResult PostUser([FromBody] LoginReq user)
         {
             if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
+            {                
+                return new ApiResult(StatusCodes.Status400BadRequest);
             }
-
             String accessToken = _service.GetAccessToken(user.Id, user.Pw);
-            
-            return CreatedAtAction("login", new { id = user.Id , token= accessToken  }, user);
+
+            return new ApiResult {
+                result = new LoginRes(){
+                    accessToken = accessToken 
+                }
+            };
+        }
+
+        [HttpGet("myinfo/{accessToken}")]
+        public User GetUserByid(String accessToken)
+        {
+            return _service.GetMyInfo(accessToken);
         }
 
     }
