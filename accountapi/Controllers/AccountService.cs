@@ -56,6 +56,7 @@ namespace accountapi.Controllers
             }
             else
             {
+                string nick = accessUser.NickName;
                 string base64 = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
                 string token = Base64UrlEncoder.Encode(base64);
                 
@@ -68,7 +69,7 @@ namespace accountapi.Controllers
                 });
 
                 _context.SaveChanges();
-                return token;
+                return token+"^^"+nick;
             }
         }
 
