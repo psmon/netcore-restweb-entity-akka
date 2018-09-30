@@ -8,6 +8,8 @@ using accountapi.Contents;
 using Akka.Actor;
 using accountapi.Actors;
 using Microsoft.IdentityModel.Tokens;
+using accountapi.Models.API;
+using Microsoft.EntityFrameworkCore;
 
 namespace accountapi.Controllers
 {
@@ -47,8 +49,9 @@ namespace accountapi.Controllers
             return _context.Users.First(p => p.UserId == id);
         }
 
-        public String GetAccessToken(string userid,string userpw)
+        public LoginRes GetAccessToken(string userid,string userpw)
         {
+            LoginRes result = new LoginRes();
             User accessUser = _context.Users.First(p => p.MyId == userid && p.PassWord == userpw);
             if (accessUser == null)
             {
@@ -69,13 +72,19 @@ namespace accountapi.Controllers
                 });
 
                 _context.SaveChanges();
-                return token+"^^"+nick;
+                result.nick = nick;
+                result.accessToken = token;
+
+                return result;
             }
         }
 
         public User GetMyInfo(string accessToken)
         {
-            User myinfo= _context.TokenHistories.First(p => p.AuthToken == accessToken).User;
+            User myinfo= _context.TokenHistories.Include( p=>p.User)
+                .First(p => p.AuthToken.Equals(accessToken))
+                .User;
+            
             if (myinfo == null) throw new Exception("401");
             myinfo.PassWord = "******";
             return myinfo;

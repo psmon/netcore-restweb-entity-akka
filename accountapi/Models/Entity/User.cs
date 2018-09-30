@@ -31,6 +31,7 @@ namespace accountapi.Models
         [Required]
         public String PassWord { get; set; }
 
+        [Required]
         public DateTime RegDate { get; set; }
         
 

@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace accountapi.Models.API
 {
-    public class LoginRes : CommonRes
+    public class CommonRes
     {
-        public String nick { get; set; }
-        public String accessToken { get; set; }
+        public string msg = "ok";
     }
 }

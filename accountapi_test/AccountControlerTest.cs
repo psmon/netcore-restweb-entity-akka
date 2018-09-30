@@ -173,7 +173,7 @@ namespace accountapi_test
         public void TokenTest1()
         {
             var service = new AccountService(_context, _actorSystem);           
-            var accessToken = service.GetAccessToken("TestID1", "TEST1231");
+            var accessToken = service.GetAccessToken("TestID1", "TEST1231").accessToken;
             User myInfo = service.GetMyInfo(accessToken);
             Assert.Equal("Mynick1", myInfo.NickName);           
             //TestID1 TEST1231

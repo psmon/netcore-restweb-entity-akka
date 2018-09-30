@@ -50,7 +50,17 @@ namespace accountapi.Controllers
         /// <summary>
         /// 로그인후 자신의 계정처리에 필요한 accessToken을 할당받습니다.
         /// </summary>
-        /// <param name="user"></param>   
+        /// <param name="user"></param>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /login
+        ///     {
+        ///        "id": "TestID1",
+        ///        "pw": "TEST1231"
+        ///     }
+        ///
+        /// </remarks> 
         [HttpPost("login")]
         public ActionResult<LoginRes> PostUser([FromBody] LoginReq user)
         {
@@ -59,15 +69,28 @@ namespace accountapi.Controllers
             {                
                 return BadRequest(ModelState);
             }
-            String[] tokenAndNick = _service.GetAccessToken(user.Id, user.Pw).Split("^^");
 
-            LoginRes result = new LoginRes();
-            result.accessToken = tokenAndNick[0];
-            result.nick = tokenAndNick[1];
-
+            LoginRes result = _service.GetAccessToken(user.Id, user.Pw);
+            
             return Ok(result);
             
         }
+
+        [HttpPost("register")]
+        public ActionResult<CommonRes> PostResigter([FromBody] RegisterReq user)
+        {
+            User addUser = new User()
+            {
+                MyId = user.MyId,
+                NickName = user.NickName,
+                PassWord=user.PassWord,
+                RegDate = DateTime.Now
+            };
+            _service.AddObj(addUser);           
+            _service.UpdateDB();
+            return Ok(new CommonRes());
+        }
+
 
         /// <summary>
         /// accessToken을 통해 자신의 정보 조회를 합니다.
