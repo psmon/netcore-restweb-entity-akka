@@ -17,6 +17,8 @@ namespace accountapi.Models
 
         public List<SocialInfo> SocialInfos { get; set; }
 
+        public List<TokenHistory> TokenHistorys { get; set; }
+
         public Boolean IsSocialActive { get; set; }
 
         [StringLength(50,MinimumLength = 3)]

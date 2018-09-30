@@ -18,9 +18,16 @@ namespace accountapi.Contents
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //제약설정
+            //관계설정
+            modelBuilder.Entity<TokenHistory>()                
+                .HasOne(t => t.User)
+                .WithMany(b => b.TokenHistorys)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+
+            //인덱스 설정
             modelBuilder.Entity<TokenHistory>()
-                .HasIndex(p => new { p.AuthToken })
+                .HasIndex(t => new { t.AuthToken })
                 .IsUnique(true);
         }
         

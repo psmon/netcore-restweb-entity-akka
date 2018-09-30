@@ -86,7 +86,6 @@ namespace accountapi.Controllers
                 .User;
             
             if (userInfo == null) throw new Exception("401");
-            userInfo.PassWord = "******";
             return userInfo;
         }
 
@@ -100,8 +99,15 @@ namespace accountapi.Controllers
             _context.SaveChanges();
         }
 
-        public void DelObj(User user)
+        protected void ClearChild(User user)
         {
+            if (user.SocialInfos != null) user.SocialInfos.Clear();
+            if (user.TokenHistorys != null) user.TokenHistorys.Clear();
+        }
+
+        public void DelObj(User user)
+        {                        
+            ClearChild(user);
             _context.Remove(user);
         }
 

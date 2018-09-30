@@ -11,8 +11,8 @@ namespace accountapi.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TokenHistoryId { get; set; }
-
-        [ForeignKey("UserForeignKey")]
+        
+        //[ForeignKey("UserForeignKey")]
         public User User { get; set; }
         
         public String AuthToken { get; set; }
