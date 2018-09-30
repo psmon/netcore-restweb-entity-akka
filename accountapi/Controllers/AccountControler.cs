@@ -91,6 +91,22 @@ namespace accountapi.Controllers
             return Ok(new CommonRes());
         }
 
+        [HttpDelete("unregister/{accessToken}")]
+        public ActionResult<CommonRes> UnRegister(String accessToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            User delUser = _service.GetUserInfo(accessToken);
+
+            _service.DelObj(delUser);
+            _service.UpdateDB();
+            return Ok(new CommonRes());
+
+        }
+
 
         /// <summary>
         /// accessToken을 통해 자신의 정보 조회를 합니다.
@@ -104,7 +120,7 @@ namespace accountapi.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(_service.GetMyInfo(accessToken));
+            return Ok(_service.GetUserInfo(accessToken));
         }
 
     }

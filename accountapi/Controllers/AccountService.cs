@@ -79,15 +79,15 @@ namespace accountapi.Controllers
             }
         }
 
-        public User GetMyInfo(string accessToken)
+        public User GetUserInfo(string accessToken)
         {
-            User myinfo= _context.TokenHistories.Include( p=>p.User)
+            User userInfo= _context.TokenHistories.Include( p=>p.User)
                 .First(p => p.AuthToken.Equals(accessToken))
                 .User;
             
-            if (myinfo == null) throw new Exception("401");
-            myinfo.PassWord = "******";
-            return myinfo;
+            if (userInfo == null) throw new Exception("401");
+            userInfo.PassWord = "******";
+            return userInfo;
         }
 
         public void AddObj(User user)
