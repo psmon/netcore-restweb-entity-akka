@@ -18,21 +18,42 @@ using Xunit.Sdk;
 using System.Collections.Generic;
 using Xunit.Abstractions;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace accountapi_test
 {
 
-    public class AccountControlerTest
-    {
+    public class AccountControlerTest { 
+
+        public static IConfiguration InitConfiguration()
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.test.json")
+                .Build();
+            return config;
+        }
+
+        static IConfiguration config;
+
         private readonly ITestOutputHelper output;
 
-        public static readonly string ConnectionString = "server=localhost;database=db_account;user=psmon;password=db1234";
+        static public string ConnectionString = "xxx";
 
-        public static readonly string testConnectionString = "server=localhost;database=db_test;user=psmon;password=db1234";
+        static public string TestConnectionString = "xx";
+
+        internal static void LoadDBConfig()
+        {
+            config = InitConfiguration();
+            ConnectionString = config.GetConnectionString("db_account");
+            TestConnectionString = config.GetConnectionString("db_test");
+        } 
         
         public AccountControlerTest(ITestOutputHelper output)
         {
+            LoadDBConfig();
+
             this.output = output;
+            
             InitContext();
         }
 
@@ -49,6 +70,8 @@ namespace accountapi_test
 
         internal static int PrepareTestData()
         {
+            LoadDBConfig();
+
             var builder = new DbContextOptionsBuilder<AccountContent>()
                 .UseLoggerFactory(LogSettings.DebugLogger)
                 .UseMySql(AccountControlerTest.ConnectionString);
@@ -65,7 +88,7 @@ namespace accountapi_test
 
             var testOpt = new DbContextOptionsBuilder<TestContext>()
                 .UseLoggerFactory(LogSettings.DebugLogger)
-                .UseMySql(AccountControlerTest.testConnectionString);
+                .UseMySql(AccountControlerTest.TestConnectionString);
 
             var testContext = new TestContext(testOpt.Options);
 
@@ -89,7 +112,7 @@ namespace accountapi_test
             //For Test
             var testOpt = new DbContextOptionsBuilder<TestContext>()
                 .UseLoggerFactory(LogSettings.DebugLogger)
-                .UseMySql(AccountControlerTest.testConnectionString);
+                .UseMySql(AccountControlerTest.TestConnectionString);
 
             _testContext = new TestContext(testOpt.Options);
             _testContext2 = new TestContext(testOpt.Options);

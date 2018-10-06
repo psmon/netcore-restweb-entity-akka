@@ -25,16 +25,17 @@ namespace accountapi
         public Startup( IConfiguration configuration )
         {
             Configuration = configuration;
+            String dbstr = Configuration.GetConnectionString("db_account")
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices( IServiceCollection services )
-        {
+        {           
             services.AddDbContext<AccountContent>(opt => {
                 opt.UseLoggerFactory(LogSettings.ConsoleLogger);
-                opt.UseMySql("server=localhost;database=db_account;user=psmon;password=db1234");
+                opt.UseMySql(Configuration.GetConnectionString("db_account"));
             });
 
             services.AddSingleton<ActorSystem>(_ => ActorSystem.Create("accountapi"));
