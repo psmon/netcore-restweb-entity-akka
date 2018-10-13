@@ -25,7 +25,7 @@ namespace accountapi
         public Startup( IConfiguration configuration )
         {
             Configuration = configuration;
-            String dbstr = Configuration.GetConnectionString("db_account")
+            String dbstr = Configuration.GetConnectionString("db_account");
         }
 
         public IConfiguration Configuration { get; }
