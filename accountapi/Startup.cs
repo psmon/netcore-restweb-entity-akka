@@ -43,12 +43,13 @@ namespace accountapi
                 opt.UseMySql(Configuration.GetConnectionString("db_account"));
             });
 
-            services.AddSingleton<ActorSystem>(_ => ActorSystem.Create("accountapi"));
-
+            
             //services.AddSingleton<AccountService>();
             services.AddTransient<AccountService>();
 
-            services.AddDistributedMemoryCache();
+            //services.AddDistributedMemoryCache();
+
+            services.AddMemoryCache();
 
             services.AddSession(options =>
             {
@@ -69,10 +70,18 @@ namespace accountapi
                 c.IncludeXmlComments(xmlPath);
             });
 
+            //Akka
+            AkkaSetting akkaConfig = new AkkaSetting(Configuration);
+            services.AddSingleton(_ => ActorSystem.Create("AccountClusterSystem", akkaConfig.GetConfig()));
+
+            services.AddSingleton<LocalCacheRepository>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure( IApplicationBuilder app, IHostingEnvironment env )
+        public void Configure( IApplicationBuilder app, IHostingEnvironment env,
+            IApplicationLifetime lifetime)
         {
             app.UseStaticFiles();
 
@@ -84,10 +93,7 @@ namespace accountapi
                     
                     // 유닛 테스트 PreparTestData()로 샘플 스키마 셋팅이 가능합니다.
                     //context.Database.EnsureDeleted();
-                    //context.Database.EnsureCreated();
-
-                    var actorSystem = serviceScope.ServiceProvider.GetRequiredService<ActorSystem>();
-                    System.Console.WriteLine( "Actor System Check==="+actorSystem.Name);                   
+                    //context.Database.EnsureCreated();               
                 }
                 app.UseDeveloperExceptionPage();               
             }
@@ -107,6 +113,18 @@ namespace accountapi
 
             app.UseSession();
             app.UseMvc();
+
+
+            //Akka Life Cycle
+            lifetime.ApplicationStarted.Register(() =>
+            {
+                app.ApplicationServices.GetService<ActorSystem>(); // start Akka.NET                
+            });
+            lifetime.ApplicationStopping.Register(() =>
+            {
+                app.ApplicationServices.GetService<ActorSystem>().Terminate().Wait();
+            });
+
         }
     }
 }
