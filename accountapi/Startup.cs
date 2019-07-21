@@ -81,12 +81,13 @@ namespace accountapi
                 using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
                 {
                     var context = serviceScope.ServiceProvider.GetRequiredService<AccountContent>();
+                    
+                    // 유닛 테스트 PreparTestData()로 샘플 스키마 셋팅이 가능합니다.
                     //context.Database.EnsureDeleted();
                     //context.Database.EnsureCreated();
-                    var actorSystem = serviceScope.ServiceProvider.GetRequiredService<ActorSystem>();
-                    System.Console.WriteLine( "Actor System Check==="+actorSystem.Name);
 
- 
+                    var actorSystem = serviceScope.ServiceProvider.GetRequiredService<ActorSystem>();
+                    System.Console.WriteLine( "Actor System Check==="+actorSystem.Name);                   
                 }
                 app.UseDeveloperExceptionPage();               
             }

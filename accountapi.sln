@@ -7,6 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "accountapi", "accountapi\ac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "accountapi_test", "accountapi_test\accountapi_test.csproj", "{617CB08F-6A48-4FB1-B2F8-632BAD45D8BA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testinfra", "testinfra", "{36D74D5A-21FA-4F41-A1A2-78B7F1D645FE}"
+	ProjectSection(SolutionItems) = preProject
+		TestInfra\docker-compose.yml = TestInfra\docker-compose.yml
+		TestInfra\init\firstsql.txt = TestInfra\init\firstsql.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

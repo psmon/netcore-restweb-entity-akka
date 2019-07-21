@@ -34,8 +34,7 @@ namespace accountapi.Controllers
         {
             _context = context;
             _actorSystem = actorSystem;
-
-            Console.WriteLine(_context.Users.First(p => p.UserId == 1).NickName);
+            
             System.Console.WriteLine("Actor System Check===" + actorSystem.Name);
         }
 
